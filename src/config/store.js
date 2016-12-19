@@ -6,8 +6,11 @@ import {
 } from 'redux';
 
 import thunk from 'redux-thunk';
+import { routerReducer } from 'react-router-redux';
 
-const reducers = combineReducers({});
+const reducers = combineReducers({
+  routing: routerReducer
+});
 
 const middlewares = compose(
   applyMiddleware(thunk),
