@@ -1,3 +1,9 @@
 @import "./../node_modules/normalize.css/normalize.css";
 @import "./../node_modules/milligram/dist/milligram.min.css";
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic);
+
+@import "./styles/variables.scss";
+
+@import "./components/layout/styles.scss";
+@import "./components/unauthorized/styles.scss";
+@import "./modules/header/style.scss";

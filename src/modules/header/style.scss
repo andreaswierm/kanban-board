@@ -1,0 +1,25 @@
+.header {
+  padding: 0 $page-left-padding 0 $page-left-padding;
+  height: $header-lineHeigth;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-title {
+  display: inline;
+  font-size: 1.6rem;
+  color: $color-primary;
+  line-height: $header-lineHeigth;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+}
+
+.header-list {
+  list-style: none;
+}
+
+.header-list-link {
+  font-size: 1.6rem;
+  line-height: $header-lineHeigth;
+}
