@@ -1,5 +1,5 @@
 const authorize = () => {
-  return fetch('http://localhost:3000/session', {
+  return fetch(`${process.env.API_URL}/session`, {
     method: 'GET',
     credentials: 'include'
   })
@@ -9,7 +9,7 @@ const authorize = () => {
 }
 
 const logout = () => {
-  return fetch('http://localhost:3000/session', {
+  return fetch(`${process.env.API_URL}/session`, {
     method: 'DELETE',
     credentials: 'include'
   });
