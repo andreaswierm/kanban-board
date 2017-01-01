@@ -1,5 +1,4 @@
 import {
-  ON_CREATE_SUCCESS,
   ON_LOAD_ALL
 } from './constants';
 
@@ -8,13 +7,6 @@ const initialState = {
 };
 
 const reducers = {
-  [ON_CREATE_SUCCESS]: (state, action) => {
-    return {
-      ...state,
-      list: state.list.concat(action.payload)
-    };
-  },
-
   [ON_LOAD_ALL]: (state, action) => {
     return {
       ...state,

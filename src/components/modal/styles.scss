@@ -1,0 +1,22 @@
+.modal-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8)
+}
+
+.modal {
+  background-color: $white;
+  border-radius: 3px;
+  border: 1px solid $color-border;
+  box-shadow: $shadow;
+  max-height: 60vh;
+  overflow-y: scroll;
+  padding: $page-padding;
+  width: 60%;
+}

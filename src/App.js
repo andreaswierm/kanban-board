@@ -12,6 +12,7 @@ import {
 
 import {
   Auth,
+  ProjectForm,
   ProjectList
 } from '~/modules';
 
@@ -23,10 +24,13 @@ class App extends Component {
   		<Provider store={store}>
         <Router history={history}>
           <Route component={Auth}>
-            <Redirect from="/" to="/projects" />
+            <Redirect from="/" to="/organizations/" />
+            <Route path="organizations" component={Layout} />
 
-            <Route path="/" component={Layout}>
-              <Route path="/projects" component={ProjectList} />
+            <Route path="organizations/:organizationId" component={Layout}>
+              <Route path="projects" component={ProjectList}>
+                <Route path="new" component={ProjectForm} />
+              </Route>
             </Route>
           </Route>
 

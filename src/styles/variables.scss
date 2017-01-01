@@ -7,7 +7,15 @@ $page-top-padding: $page-padding;
 
 // Colors
 $color-primary: #756C76;
+$color-link: #9B4DCA;
+$color-border: rgba(117, 108, 118, 0.15);
+$white: white;
+
+// Helper
+$shadow: 0px 3px 15px rgba(136, 136, 136, 0.25);
 
 // Header
 $header-lineHeigth: 64px;
 
+// Dropdown
+$dropdown-width: 160px;

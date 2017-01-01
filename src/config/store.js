@@ -16,11 +16,13 @@ import { browserHistory } from 'react-router';
 
 import {
   auth,
+  organization,
   project
 } from '~/redux';
 
 const reducers = combineReducers({
   [auth.NAME]: auth.reducer,
+  [organization.NAME]: organization.reducer,
   [project.NAME]: project.reducer,
   routing: routerReducer
 });

@@ -1,37 +1,60 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import * as actions from '~/redux/project/actions';
 
 class ProjectList extends Component {
   componentDidMount() {
-    this.props.loadAll();
+    const {
+      loadAll,
+      organizationId
+    } = this.props;
+
+    loadAll(organizationId);
   }
 
   render() {
-    const { list } = this.props;
+    const {
+      children,
+      list,
+      organizationId
+    } = this.props;
+
+    const childrenWithProps = React.Children.map(children, (child) => {
+      return React.cloneElement(child, this.props);
+    });
 
     return (
-      <table>
-        <thead>
-          <tr>
-            <th>
-              Name
-            </th>
+      <div>
+        <Link
+          to={`/organizations/${organizationId}/projects/new`}
+          className="button button-outline float-right">
+          New Project
+        </Link>
 
-            <th>
-              <div className="float-right">
-                Created at
-              </div>
-            </th>
-          </tr>
-        </thead>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Name
+              </th>
 
-        <tbody>
-          {list.map(this.renderTableRow)}
-        </tbody>
-      </table>
+              <th>
+                <div className="float-right">
+                  Created at
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {list.map(this.renderTableRow)}
+          </tbody>
+        </table>
+
+        {childrenWithProps}
+      </div>
     );
   }
 
@@ -55,11 +78,12 @@ class ProjectList extends Component {
 }
 
 const mapPropsToState = (state, ownProps) => ({
-  list: state.PROJECT.list
+  list: state.PROJECT.list,
+  organizationId: ownProps.params.organizationId
 });
 
 const mapActionsToState = (dispatch) => ({
-  loadAll: () => dispatch(actions.loadAll())
+  loadAll: (organizationId) => dispatch(actions.loadAll(organizationId))
 });
 
 export default connect(mapPropsToState, mapActionsToState)(ProjectList);
