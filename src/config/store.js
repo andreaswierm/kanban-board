@@ -15,11 +15,13 @@ import {
 import { browserHistory } from 'react-router';
 
 import {
-  auth
+  auth,
+  project
 } from '~/redux';
 
 const reducers = combineReducers({
   [auth.NAME]: auth.reducer,
+  [project.NAME]: project.reducer,
   routing: routerReducer
 });
 
