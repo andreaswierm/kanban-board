@@ -30,6 +30,7 @@ class App extends Component {
             <Route path="organizations/:organizationId" component={Layout}>
               <Route path="projects" component={ProjectList}>
                 <Route path="new" component={ProjectForm} />
+                <Route path=":projectId/edit" component={ProjectForm} />
               </Route>
             </Route>
           </Route>

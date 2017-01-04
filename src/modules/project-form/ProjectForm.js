@@ -6,7 +6,42 @@ import * as actions from '~/redux/project/actions';
 
 class ProjectForm extends Component {
   state = {
+    isEditing: false,
     name: ''
+  }
+
+  componentWillMount() {
+    const {
+      list,
+      getProject,
+
+      params: {
+        organizationId,
+        projectId
+      }
+    } = this.props;
+
+    const { isEditing } = this.state;
+
+    if (projectId) {
+      getProject(organizationId, projectId);
+    }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    const {
+      list,
+      projectToEdit,
+
+      params: {
+        projectId
+      }
+    } = nextProps;
+
+    if (!nextState.isEditing && projectId && projectToEdit) {
+      nextState.isEditing = true;
+      nextState.name = projectToEdit.name;
+    }
   }
 
   onChangeName(event) {
@@ -23,27 +58,39 @@ class ProjectForm extends Component {
   }
 
   onSubmitForm(event) {
-    const { name } = this.state;
+    let promise;
+
+    const {
+      isEditing,
+      name
+    } = this.state;
 
     const {
       close,
-      organizationId
+      create,
+      organizationId,
+      projectId,
+      update
     } = this.props;
 
     event.preventDefault();
 
-    this
-      .props
-      .create(organizationId, {
-        name
-      })
-      .then(() => {
-        close(organizationId);
-      });
+    if (isEditing) {
+      promise = update(organizationId, projectId, {name})
+    } else {
+      promise = create(organizationId, {name})
+    }
+
+    promise.then(() => {
+      close(organizationId);
+    });
   }
 
   render() {
-    const { name } = this.state;
+    const {
+      isEditing,
+      name
+    } = this.state;
 
     return (
       <Modal onClickClose={this.onClickCloseModal.bind(this)}>
@@ -66,7 +113,7 @@ class ProjectForm extends Component {
           <button
             className="button float-right"
             type="submit">
-            Create
+            {isEditing ? 'Save' : 'Create'}
           </button>
         </form>
       </Modal>
@@ -75,12 +122,17 @@ class ProjectForm extends Component {
 }
 
 const mapPropsToState = (state, ownProps) => ({
-  organizationId: ownProps.organizationId
+  list: state.PROJECT.list,
+  organizationId: ownProps.params.organizationId,
+  projectId: ownProps.params.projectId,
+  projectToEdit: state.PROJECT.edit
 });
 
 const mapActionsToState = (dispatch) => ({
   close: (organizationId) => dispatch(push(`/organizations/${organizationId}/projects`)),
-  create: (organizationId, payload) => dispatch(actions.create(organizationId, payload))
+  create: (organizationId, payload) => dispatch(actions.create(organizationId, payload)),
+  getProject: (organizationId, projectId) => dispatch(actions.getProject(organizationId, projectId)),
+  update: (organizationId, projectId, payload) => dispatch(actions.update(organizationId, projectId, payload))
 });
 
 export default connect(mapPropsToState, mapActionsToState)(ProjectForm);

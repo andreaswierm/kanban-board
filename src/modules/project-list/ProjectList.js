@@ -21,8 +21,8 @@ class ProjectList extends Component {
       organizationId
     } = this.props;
 
-    const childrenWithProps = React.Children.map(children, (child) => {
-      return React.cloneElement(child, this.props);
+    const tableRows = list.map((item, index) => {
+      return this.renderTableRow(item, index);
     });
 
     return (
@@ -49,16 +49,18 @@ class ProjectList extends Component {
           </thead>
 
           <tbody>
-            {list.map(this.renderTableRow)}
+            {tableRows}
           </tbody>
         </table>
 
-        {childrenWithProps}
+        {children}
       </div>
     );
   }
 
   renderTableRow(project, index) {
+    const { organizationId } = this.props;
+
     return (
       <tr key={index}>
         <td>
@@ -70,6 +72,10 @@ class ProjectList extends Component {
         <td>
           <div className="float-right">
             {project.createdAt.format('MMMM Do')}
+            &nbsp;
+            <Link to={`/organizations/${organizationId}/projects/${project.id}/edit`}>
+              Edit
+            </Link>
           </div>
         </td>
       </tr>

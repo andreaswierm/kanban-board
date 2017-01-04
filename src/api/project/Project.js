@@ -28,9 +28,37 @@ const all = (organizationId) => {
 
 const create = (organizationId, payload) => {
   return fetch(`${process.env.API_URL}/organizations/${organizationId}/projects`, {
-      body: JSON.stringify(payload),
+      body: JSON.stringify(buildForApi(payload)),
       credentials: 'include',
       method: 'POST',
+      headers: {'Content-type': 'application/json'}
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((project) => {
+      return buildForUi(project);
+    });
+};
+
+const get = (organizationId, projectId) => {
+  return fetch(`${process.env.API_URL}/organizations/${organizationId}/projects/${projectId}`, {
+      credentials: 'include',
+      method: 'GET'
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((project) => {
+      return buildForUi(project);
+    });
+};
+
+const update = (organizationId, projectId, payload) => {
+  return fetch(`${process.env.API_URL}/organizations/${organizationId}/projects/${projectId}`, {
+      body: JSON.stringify(buildForApi(payload)),
+      credentials: 'include',
+      method: 'PUT',
       headers: {'Content-type': 'application/json'}
     })
     .then((response) => {
@@ -43,5 +71,7 @@ const create = (organizationId, payload) => {
 
 export default {
   all,
-  create
+  create,
+  get,
+  update
 };

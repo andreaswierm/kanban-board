@@ -1,9 +1,12 @@
 import {
   ON_CREATE_SUCCESS,
-  ON_LOAD_ALL
+  ON_LOAD_ALL,
+  ON_LOAD_PROJECT_TO_EDIT,
+  ON_UPDATE_SUCCESS
 } from './constants';
 
 const initialState = {
+  edit: {},
   list: []
 };
 
@@ -20,6 +23,28 @@ const reducers = {
       ...state,
       list: action.payload
     };
+  },
+
+  [ON_LOAD_PROJECT_TO_EDIT]: (state, action) => {
+    return {
+      ...state,
+      edit: action.payload
+    };
+  },
+
+  [ON_UPDATE_SUCCESS]: (state, action) => {
+    const newList = state.list.map((project) => {
+      if (project.id === action.payload.id) {
+        return action.payload;
+      }
+
+      return project;
+    });
+
+    return {
+      ...state,
+      list: newList
+    }
   }
 };
 
