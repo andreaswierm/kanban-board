@@ -12,8 +12,11 @@ import {
 
 import {
   Auth,
+  ProjectBoard,
   ProjectForm,
-  ProjectList
+  ProjectList,
+  TaskForm,
+  TaskListForm
 } from '~/modules';
 
 const history = syncHistoryWithStore(browserHistory, store);
@@ -29,8 +32,19 @@ class App extends Component {
 
             <Route path="organizations/:organizationId" component={Layout}>
               <Route path="projects" component={ProjectList}>
-                <Route path="new" component={ProjectForm} />
                 <Route path=":projectId/edit" component={ProjectForm} />
+                <Route path="new" component={ProjectForm} />
+              </Route>
+
+              <Route path="projects/:projectId" component={ProjectBoard}>
+                <Route path="task-list">
+                  <Route path="new" component={TaskListForm} />
+                  <Route path=":taskListId" component={TaskListForm} />
+                </Route>
+
+                <Route path="tasks">
+                  <Route path="new" component={TaskForm} />
+                </Route>
               </Route>
             </Route>
           </Route>

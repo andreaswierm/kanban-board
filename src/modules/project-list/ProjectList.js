@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-
 import * as actions from '~/redux/project/actions';
 
 class ProjectList extends Component {
@@ -64,9 +63,9 @@ class ProjectList extends Component {
     return (
       <tr key={index}>
         <td>
-          <a>
+          <Link to={`/organizations/${organizationId}/projects/${project.id}`}>
             {project.name}
-          </a>
+          </Link>
         </td>
 
         <td>

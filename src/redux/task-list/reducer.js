@@ -1,7 +1,8 @@
 import {
   ON_CREATE_SUCCESS,
-  ON_LOAD_ALL,
-  ON_LOAD_PROJECT_TO_EDIT,
+  ON_LOAD_SUCCESS,
+  ON_LOAD_TO_EDIT,
+  ON_REMOVE_SUCCESS,
   ON_UPDATE_SUCCESS
 } from './constants';
 
@@ -18,27 +19,36 @@ const reducers = {
     };
   },
 
-  [ON_LOAD_ALL]: (state, action) => {
+  [ON_LOAD_SUCCESS]: (state, action) => {
     return {
       ...state,
       list: action.payload
     };
   },
 
-  [ON_LOAD_PROJECT_TO_EDIT]: (state, action) => {
+  [ON_LOAD_TO_EDIT]: (state, action) => {
     return {
       ...state,
       edit: action.payload
     };
   },
 
+  [ON_REMOVE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      list: state.list.filter((taskList) => {
+        return taskList.id !== action.payload.id;
+      })
+    };
+  },
+
   [ON_UPDATE_SUCCESS]: (state, action) => {
-    const newList = state.list.map((project) => {
-      if (project.id === action.payload.id) {
+    const newList = state.list.map((taskList) => {
+      if (taskList.id === action.payload.id) {
         return action.payload;
       }
 
-      return project;
+      return taskList;
     });
 
     return {

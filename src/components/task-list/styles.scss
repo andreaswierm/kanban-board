@@ -1,0 +1,20 @@
+.taskList-container {
+  flex-grow: 1;
+  margin-right: 12px;
+  padding-bottom: $page-padding;
+  display: flex;
+  flex-direction: column;
+}
+
+.taskList-list {
+  background-color: $color-border;
+  border: 1px solid $color-border;
+  flex-grow: 1;
+  list-style: none;
+  margin: 0;
+  overflow-y: scroll;
+}
+
+.taskList-item {
+  margin-bottom: 0;
+}

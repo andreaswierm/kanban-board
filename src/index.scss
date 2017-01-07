@@ -4,9 +4,13 @@
 
 @import "./styles/variables.scss";
 
-@import "./styles/dropdown.scss";
-@import "./styles/link.scss";
 @import "./components/layout/styles.scss";
 @import "./components/modal/styles.scss";
+@import "./components/task-list/styles.scss";
+@import "./components/task/styles.scss";
 @import "./components/unauthorized/styles.scss";
-@import "./modules/header/style.scss";
+@import "./modules/header/styles.scss";
+@import "./modules/project-board/styles.scss";
+@import "./styles/dropdown.scss";
+@import "./styles/link.scss";
+@import "./styles/utility.scss";

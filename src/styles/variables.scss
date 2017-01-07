@@ -17,5 +17,11 @@ $shadow: 0px 3px 15px rgba(136, 136, 136, 0.25);
 // Header
 $header-lineHeigth: 64px;
 
+// Layout
+$layout-height: calc(100vh - #{$header-lineHeigth});
+
 // Dropdown
 $dropdown-width: 160px;
+
+// Utility
+$margin-medium: 8px;

@@ -5,8 +5,6 @@ import {
   ON_UPDATE_SUCCESS
 } from './constants';
 
-import { push } from 'react-router-redux';
-
 import API from '~/api';
 
 export const create = (organizationId, payload) => (dispatch) => {

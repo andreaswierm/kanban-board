@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Modal } from '~/components';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux'
-import * as actions from '~/redux/project/actions';
+import { Modal } from '~/components';
+import * as TaskListActions from '~/redux/task-list/actions';
 
-class ProjectForm extends Component {
+class TaskListForm extends Component {
   state = {
     isEditing: false,
     name: ''
@@ -12,45 +12,47 @@ class ProjectForm extends Component {
 
   componentWillMount() {
     const {
-      getProject,
+      getTaskList,
 
       params: {
         organizationId,
-        projectId
+        projectId,
+        taskListId
       }
     } = this.props;
 
-    if (projectId) {
-      getProject(organizationId, projectId);
+    if (taskListId) {
+      getTaskList(organizationId, projectId, taskListId);
     }
   }
 
   componentWillUpdate(nextProps, nextState) {
     const {
-      projectToEdit,
+      taskListToEdit,
 
       params: {
-        projectId
+        taskListId
       }
     } = nextProps;
 
-    if (!nextState.isEditing && projectId && projectToEdit) {
+    if (!nextState.isEditing && taskListId && taskListToEdit) {
       nextState.isEditing = true;
-      nextState.name = projectToEdit.name;
+      nextState.name = taskListToEdit.name;
     }
-  }
-
-  onChangeName(event) {
-    this.setState({name: event.target.value});
   }
 
   onClickCloseModal() {
     const {
       close,
-      organizationId
+      organizationId,
+      projectId
     } = this.props;
 
-    close(organizationId);
+    close(organizationId, projectId);
+  }
+
+  onChangeName(event) {
+    this.setState({name: event.target.value});
   }
 
   onSubmitForm(event) {
@@ -66,19 +68,20 @@ class ProjectForm extends Component {
       create,
       organizationId,
       projectId,
+      taskListId,
       update
     } = this.props;
 
     event.preventDefault();
 
     if (isEditing) {
-      promise = update(organizationId, projectId, {name})
+      promise = update(organizationId, projectId, taskListId, {name})
     } else {
-      promise = create(organizationId, {name})
+      promise = create(organizationId, projectId, {name})
     }
 
     promise.then(() => {
-      close(organizationId);
+      close(organizationId, projectId);
     });
   }
 
@@ -90,7 +93,7 @@ class ProjectForm extends Component {
 
     return (
       <Modal onClickClose={this.onClickCloseModal.bind(this)}>
-        <h5>New Project</h5>
+        <h5>New Column</h5>
 
         <form onSubmit={this.onSubmitForm.bind(this)}>
           <fieldset>
@@ -100,7 +103,7 @@ class ProjectForm extends Component {
 
             <input
               type="text"
-              placeholder="Lets get something done!"
+              placeholder="Done"
               id="nameField"
               value={name}
               onChange={this.onChangeName.bind(this)} />
@@ -118,17 +121,17 @@ class ProjectForm extends Component {
 }
 
 const mapPropsToState = (state, ownProps) => ({
-  list: state.PROJECT.list,
   organizationId: ownProps.params.organizationId,
   projectId: ownProps.params.projectId,
-  projectToEdit: state.PROJECT.edit
+  taskListId: ownProps.params.taskListId,
+  taskListToEdit: state.TASK_LIST.edit
 });
 
 const mapActionsToState = (dispatch) => ({
-  close: (organizationId) => dispatch(push(`/organizations/${organizationId}/projects`)),
-  create: (organizationId, payload) => dispatch(actions.create(organizationId, payload)),
-  getProject: (organizationId, projectId) => dispatch(actions.getProject(organizationId, projectId)),
-  update: (organizationId, projectId, payload) => dispatch(actions.update(organizationId, projectId, payload))
+  close: (organizationId, projectId) => dispatch(push(`/organizations/${organizationId}/projects/${projectId}`)),
+  create: (organizationId, projectId, payload) => dispatch(TaskListActions.create(organizationId, projectId, payload)),
+  getTaskList: (organizationId, projectId, taskListId) => dispatch(TaskListActions.loadOne(organizationId, projectId, taskListId)),
+  update: (organizationId, projectId, taskListId, payload) => dispatch(TaskListActions.update(organizationId, projectId, taskListId, payload))
 });
 
-export default connect(mapPropsToState, mapActionsToState)(ProjectForm);
+export default connect(mapPropsToState, mapActionsToState)(TaskListForm);

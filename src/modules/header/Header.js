@@ -48,7 +48,7 @@ class Header extends Component {
     organizationListNodes = organizationList.map((organization, index) => {
       let classNames = ['dropdown-list-item'];
 
-      if (parseInt(selectedOrganizationId) === organization.id) {
+      if (parseInt(selectedOrganizationId, 10) === organization.id) {
         classNames.push('dropdown-list-item-selected');
       }
 
