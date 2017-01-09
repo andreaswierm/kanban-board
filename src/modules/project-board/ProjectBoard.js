@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import * as taskActions from '~/redux/task/actions';
 import * as taskListActions from '~/redux/task-list/actions';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { DragDropContext } from 'react-dnd';
 import { Link } from 'react-router';
 import { TaskList } from '~/components';
 
 class ProjectBoard extends Component {
+  state = {
+    draggingTaskId: null,
+    isDragging: false
+  }
+
   componentWillMount() {
     const {
       loadTaskLists,
@@ -28,6 +36,34 @@ class ProjectBoard extends Component {
     } = this.props;
 
     removeTaskList(organizationId, projectId, taskList.id);
+  }
+
+  onDraggingOver(taskListId) {
+    const {
+      organizationId,
+      projectId,
+      tasks,
+      updateTask
+    } = this.props;
+
+    const { draggingTaskId } = this.state;
+
+    const task = tasks.filter((task) => {
+      return task.id === draggingTaskId;
+    })[0];
+
+    task.taskListId = taskListId;
+
+    this.setState({isDragging: false});
+
+    updateTask(organizationId, projectId, draggingTaskId, task);
+  }
+
+  onDraggingStart(taskId) {
+    this.setState({
+      draggingTaskId: taskId,
+      isDragging: true
+    });
   }
 
   render() {
@@ -85,6 +121,8 @@ class ProjectBoard extends Component {
           <TaskList
             key={index}
             onClickRemoveTaskList={this.onClickRemoveTaskList.bind(this, taskList)}
+            onDraggingOver={this.onDraggingOver.bind(this)}
+            onDraggingStart={this.onDraggingStart.bind(this)}
             organizationId={organizationId}
             projectId={projectId}
             taskListId={taskList.id}
@@ -105,7 +143,11 @@ const mapPropsToState = (state, ownProps) => ({
 const mapActionsToState = (dispatch) => ({
   loadTaskLists: (organizationId, projectId) => dispatch(taskListActions.loadAll(organizationId, projectId)),
   loadTasks: (organizationId, projectId) => dispatch(taskActions.loadAll(organizationId, projectId)),
-  removeTaskList: (organizationId, projectId, id) => dispatch(taskListActions.remove(organizationId, projectId, id))
+  removeTaskList: (organizationId, projectId, id) => dispatch(taskListActions.remove(organizationId, projectId, id)),
+  updateTask: (organizationId, projectId, taskId, payload) => dispatch(taskActions.update(organizationId, projectId, taskId, payload))
 });
 
-export default connect(mapPropsToState, mapActionsToState)(ProjectBoard);
+export default compose(
+  DragDropContext(HTML5Backend),
+  connect(mapPropsToState, mapActionsToState)
+)(ProjectBoard);

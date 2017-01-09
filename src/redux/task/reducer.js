@@ -1,6 +1,7 @@
 import {
   ON_CREATE_SUCCESS,
-  ON_LOAD_SUCCESS
+  ON_LOAD_SUCCESS,
+  ON_UPDATE_SUCCESS
 } from './constants';
 
 const initialState = {
@@ -19,6 +20,21 @@ const reducers = {
     return {
       ...state,
       list: action.payload
+    };
+  },
+
+  [ON_UPDATE_SUCCESS]: (state, action) => {
+    const newList = state.list.map((task) => {
+      if (task.id === action.payload.id) {
+        return action.payload;
+      }
+
+      return task;
+    });
+
+    return {
+      ...state,
+      list: newList
     };
   }
 };

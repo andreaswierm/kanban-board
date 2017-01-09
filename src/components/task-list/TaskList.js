@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Task } from '~/components';
+import { DropTarget } from 'react-dnd';
 import { Link } from 'react-router';
+import { Task } from '~/components';
 
 class TaskList extends Component {
   onClickRemove() {
@@ -16,13 +17,14 @@ class TaskList extends Component {
 
   render() {
     const {
+      connectDropTarget,
       organizationId,
       projectId,
       taskListId,
       title
     } = this.props;
 
-    return (
+    return connectDropTarget(
       <div className="taskList-container">
         <span className="taskList-title">
           <Link to={`/organizations/${organizationId}/projects/${projectId}/task-list/${taskListId}`}>
@@ -44,16 +46,33 @@ class TaskList extends Component {
   }
 
   renderTasks() {
-    const { tasks } = this.props;
+    const {
+      onDraggingStart,
+      tasks
+    } = this.props;
 
     return tasks.map((task, index) => {
       return (
         <li key={index} className="taskList-item">
-          <Task title={task.name} />
+          <Task
+            taskId={task.id}
+            title={task.name}
+            onDraggingStart={onDraggingStart}/>
         </li>
       );
     });
   }
 }
 
-export default TaskList;
+const taskTarget = {
+  drop(props) {
+    props.onDraggingOver(props.taskListId);
+  }
+};
+
+const collect = (connect, monitor) => {
+  return {connectDropTarget: connect.dropTarget()};
+};
+
+
+export default DropTarget('task', taskTarget, collect)(TaskList);

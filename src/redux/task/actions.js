@@ -1,6 +1,7 @@
 import {
   ON_CREATE_SUCCESS,
-  ON_LOAD_SUCCESS
+  ON_LOAD_SUCCESS,
+  ON_UPDATE_SUCCESS
 } from './constants';
 
 import API from '~/api';
@@ -29,3 +30,14 @@ export const loadAll = (organizationId, projectId) => (dispatch) => {
     });
 };
 
+export const update = (organizationId, projectId, taskId, payload) => (dispatch) => {
+  return API
+    .Task
+    .update(organizationId, projectId, taskId, payload)
+    .then((task) => {
+      dispatch({
+        type: ON_UPDATE_SUCCESS,
+        payload: task
+      });
+    });
+};

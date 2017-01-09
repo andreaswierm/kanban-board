@@ -41,7 +41,23 @@ const create = (organizationId, projectId, payload) => {
     });
 };
 
+const update = (organizationId, projectId, taskId, payload) => {
+  return fetch(`${process.env.API_URL}/organizations/${organizationId}/projects/${projectId}/tasks/${taskId}`, {
+      body: JSON.stringify(buildForApi(payload)),
+      credentials: 'include',
+      method: 'PUT',
+      headers: {'Content-type': 'application/json'}
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((task) => {
+      return buildForUi(task);
+    });
+};
+
 export default {
   all,
-  create
+  create,
+  update
 };
