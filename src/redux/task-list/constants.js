@@ -2,6 +2,5 @@ export const NAME = 'TASK_LIST';
 
 export const ON_CREATE_SUCCESS = `${NAME}/ON_CREATE_SUCCESS`;
 export const ON_LOAD_SUCCESS = `${NAME}/ON_LOAD_SUCCESS`;
-export const ON_LOAD_TO_EDIT = `${NAME}/ON_LOAD_TO_EDIT`;
 export const ON_REMOVE_SUCCESS = `${NAME}/ON_REMOVE_SUCCESS`;
 export const ON_UPDATE_SUCCESS = `${NAME}/ON_UPDATE_SUCCESS`;

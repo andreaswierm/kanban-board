@@ -1,15 +1,11 @@
 import {
   ON_CREATE_SUCCESS,
   ON_LOAD_SUCCESS,
-  ON_LOAD_TO_EDIT,
   ON_REMOVE_SUCCESS,
   ON_UPDATE_SUCCESS
 } from './constants';
 
-const initialState = {
-  edit: {},
-  list: []
-};
+const initialState = {list: []};
 
 const reducers = {
   [ON_CREATE_SUCCESS]: (state, action) => {
@@ -23,13 +19,6 @@ const reducers = {
     return {
       ...state,
       list: action.payload
-    };
-  },
-
-  [ON_LOAD_TO_EDIT]: (state, action) => {
-    return {
-      ...state,
-      edit: action.payload
     };
   },
 

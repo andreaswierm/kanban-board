@@ -1,7 +1,6 @@
 import {
   ON_CREATE_SUCCESS,
   ON_LOAD_SUCCESS,
-  ON_LOAD_TO_EDIT,
   ON_REMOVE_SUCCESS,
   ON_UPDATE_SUCCESS
 } from './constants';
@@ -42,18 +41,6 @@ export const remove = (organizationId, projectId, id) => (dispatch) => {
       dispatch({
         type: ON_REMOVE_SUCCESS,
         payload: {id}
-      });
-    });
-};
-
-export const loadOne = (organizationId, projectId, taskListId) => (dispatch) => {
-  return API
-    .TaskList
-    .get(organizationId, projectId, taskListId)
-    .then((taskList) => {
-      dispatch({
-        type: ON_LOAD_TO_EDIT,
-        payload: taskList
       });
     });
 };

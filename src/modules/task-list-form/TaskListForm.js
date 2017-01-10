@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'react-router-redux'
-import { Modal } from '~/components';
 import * as TaskListActions from '~/redux/task-list/actions';
+import API from '~/api';
+import { connect } from 'react-redux';
+import { Modal } from '~/components';
+import { push } from 'react-router-redux'
 
 class TaskListForm extends Component {
   state = {
@@ -12,8 +13,6 @@ class TaskListForm extends Component {
 
   componentWillMount() {
     const {
-      getTaskList,
-
       params: {
         organizationId,
         projectId,
@@ -21,24 +20,15 @@ class TaskListForm extends Component {
       }
     } = this.props;
 
-    if (taskListId) {
-      getTaskList(organizationId, projectId, taskListId);
-    }
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    const {
-      taskListToEdit,
-
-      params: {
-        taskListId
-      }
-    } = nextProps;
-
-    if (!nextState.isEditing && taskListId && taskListToEdit) {
-      nextState.isEditing = true;
-      nextState.name = taskListToEdit.name;
-    }
+    API
+      .TaskList
+      .get(organizationId, projectId, taskListId)
+      .then((taskList) => {
+        this.setState({
+          isEditing: true,
+          name: taskList.name
+        });
+      });
   }
 
   onClickCloseModal() {
@@ -123,14 +113,12 @@ class TaskListForm extends Component {
 const mapPropsToState = (state, ownProps) => ({
   organizationId: ownProps.params.organizationId,
   projectId: ownProps.params.projectId,
-  taskListId: ownProps.params.taskListId,
-  taskListToEdit: state.TASK_LIST.edit
+  taskListId: ownProps.params.taskListId
 });
 
 const mapActionsToState = (dispatch) => ({
   close: (organizationId, projectId) => dispatch(push(`/organizations/${organizationId}/projects/${projectId}`)),
   create: (organizationId, projectId, payload) => dispatch(TaskListActions.create(organizationId, projectId, payload)),
-  getTaskList: (organizationId, projectId, taskListId) => dispatch(TaskListActions.loadOne(organizationId, projectId, taskListId)),
   update: (organizationId, projectId, taskListId, payload) => dispatch(TaskListActions.update(organizationId, projectId, taskListId, payload))
 });
 
