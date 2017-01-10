@@ -1,7 +1,6 @@
 import {
   ON_CREATE_SUCCESS,
   ON_LOAD_ALL,
-  ON_LOAD_PROJECT_TO_EDIT,
   ON_UPDATE_SUCCESS
 } from './constants';
 
@@ -14,18 +13,6 @@ export const create = (organizationId, payload) => (dispatch) => {
     .then((project) => {
       dispatch({
         type: ON_CREATE_SUCCESS,
-        payload: project
-      });
-    });
-};
-
-export const getProject = (organizationId, projectId) => (dispatch) => {
-  return API
-    .Project
-    .get(organizationId, projectId)
-    .then((project) => {
-      dispatch({
-        type: ON_LOAD_PROJECT_TO_EDIT,
         payload: project
       });
     });

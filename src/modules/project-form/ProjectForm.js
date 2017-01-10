@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Modal } from '~/components';
-import { connect } from 'react-redux';
-import { push } from 'react-router-redux'
 import * as actions from '~/redux/project/actions';
+import API from '~/api';
+import { connect } from 'react-redux';
+import { Modal } from '~/components';
+import { push } from 'react-router-redux'
 
 class ProjectForm extends Component {
   state = {
@@ -12,7 +13,7 @@ class ProjectForm extends Component {
 
   componentWillMount() {
     const {
-      getProject,
+    //   getProject,
 
       params: {
         organizationId,
@@ -20,24 +21,15 @@ class ProjectForm extends Component {
       }
     } = this.props;
 
-    if (projectId) {
-      getProject(organizationId, projectId);
-    }
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    const {
-      projectToEdit,
-
-      params: {
-        projectId
-      }
-    } = nextProps;
-
-    if (!nextState.isEditing && projectId && projectToEdit) {
-      nextState.isEditing = true;
-      nextState.name = projectToEdit.name;
-    }
+    API
+      .Project
+      .get(organizationId, projectId)
+      .then((project) => {
+        this.setState({
+          isEditing: true,
+          name: project.name
+        });
+      });
   }
 
   onChangeName(event) {
@@ -120,14 +112,12 @@ class ProjectForm extends Component {
 const mapPropsToState = (state, ownProps) => ({
   list: state.PROJECT.list,
   organizationId: ownProps.params.organizationId,
-  projectId: ownProps.params.projectId,
-  projectToEdit: state.PROJECT.edit
+  projectId: ownProps.params.projectId
 });
 
 const mapActionsToState = (dispatch) => ({
   close: (organizationId) => dispatch(push(`/organizations/${organizationId}/projects`)),
   create: (organizationId, payload) => dispatch(actions.create(organizationId, payload)),
-  getProject: (organizationId, projectId) => dispatch(actions.getProject(organizationId, projectId)),
   update: (organizationId, projectId, payload) => dispatch(actions.update(organizationId, projectId, payload))
 });
 
